@@ -9,3 +9,13 @@ pub fn check_port(target: &str) -> bool {
 
     TcpStream::connect_timeout(&addr, Duration::from_secs(3)).is_ok()
 }
+
+pub async fn check_http(target: &str) -> bool {
+    match reqwest::get(target).await {
+        Ok(response) => response.status().is_success(),
+        Err(_) => {
+            println!("Could not make http GET request");
+            false
+        },
+    }
+}
